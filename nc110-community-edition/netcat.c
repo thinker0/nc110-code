@@ -676,7 +676,13 @@ newskt:
   rr = setsockopt(nnetfd, SOL_SOCKET, SO_RCVBUF, &o_rcvbuf, sizeof o_rcvbuf);
   rr = setsockopt(nnetfd, SOL_SOCKET, SO_SNDBUF, &o_sndbuf, sizeof o_sndbuf);
 #endif
-  
+    
+  if (!o_udpmode) {
+    struct linger ln;
+    ln.l_onoff = 1;
+    ln.l_linger = 0;
+    rr = setsockopt(nnetfd, SOL_SOCKET, SO_LINGER, (const void *) &ln, sizeof(ln));
+  }
   /* fill in all the right sockaddr crud */
     lclend->sin_family = AF_INET;
 
